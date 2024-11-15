@@ -1,17 +1,19 @@
-import { IForm } from '../../types';
+import { IContact } from '../../types';
 
-import { createSlice, } from '@reduxjs/toolkit';
-import { createContact } from '../thunks/contactsThunk.ts';
+import { createSlice, PayloadAction, } from '@reduxjs/toolkit';
+import { createContact, fetchAllContacts } from '../thunks/contactsThunk.ts';
 import { RootState } from '../../app/store.ts';
 
 interface ContactState {
   isAddLoading: boolean;
-  contacts:IForm[];
+  contacts:IContact[];
+  isFetchLoading: boolean;
 }
 
 const initialState:ContactState   = {
   isAddLoading: false,
   contacts:[],
+  isFetchLoading:true
   // oneDish:null,
 
   // isFetchOneDishLoading: false,
@@ -21,8 +23,8 @@ const initialState:ContactState   = {
 };
 export const selectAddLoading = (state: RootState) => state.contacts.isAddLoading;
 //
-// export const selectDishes = (state: RootState) => state.dishes.dishes;
-// export const selectOneDish = (state: RootState) => state.dishes.oneDish;
+export const selectFetchLoading = (state: RootState) => state.contacts.isFetchLoading;
+export const selectContacts = (state: RootState) => state.contacts.contacts;
 // export const selectAddLoading = (state: RootState) => state.contacts;
 // export const selectCreateDishLoading = (state: RootState) => state.dishes.isCreateLoading;
 // export const selectEditDishLoading = (state: RootState) => state.dishes.isEditLoading;
@@ -45,7 +47,18 @@ export const contactsSlice = createSlice({
       })
       .addCase(createContact.rejected, state => {
         state.isAddLoading = false;
-      });
+      })
+
+    .addCase(fetchAllContacts.pending, state => {
+        state.isFetchLoading = true;
+      })
+        .addCase(fetchAllContacts.fulfilled, (state,action:PayloadAction<IContact[]>) => {
+          state.isFetchLoading = false;
+          state.contacts = action.payload;
+        })
+        .addCase(fetchAllContacts.rejected, state => {
+          state.isFetchLoading = false;
+        });
       // .addCase(deleteOneDish.pending, state => {
       //   state.isDeleteLoading = true;
       // })

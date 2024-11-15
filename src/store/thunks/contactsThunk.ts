@@ -1,29 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IForm } from '../../types';
+import { IContact, IContactsList, IForm } from '../../types';
 import axiosApi from '../../axiosAPI.ts';
 
-// export const fetchAllDishes = createAsyncThunk<IDish[], void>(
-//   'dishes/fetchAllDishes',
-//   async (_arg, thunkAPI) => {
-//     const response: {data: DishesList | null} = await axiosApi('dishes.json');
-//     const dishesList = response.data;
-//
-//     if (dishesList === null) {
-//       return [];
-//     }
-//
-//     const dishes: DishesList = dishesList;
-//
-//    const newDishes = Object.keys(dishesList).map(dish => {
-//       return {
-//         ...dishes[dish],
-//         id: dish
-//       };
-//     });
-//    thunkAPI.dispatch(updateCart(newDishes));
-//    return newDishes;
-//   }
-// );
+export const fetchAllContacts = createAsyncThunk<IContact[], void>(
+  'contacts/fetchAllContacts',
+  async () => {
+    const response: {data: IContactsList | null} = await axiosApi('contacts.json');
+    const contactsList = response.data;
+
+    if (contactsList === null) {
+      return [];
+    }
+
+    const contacts: IContactsList = contactsList;
+
+   const newContacts = Object.keys(contactsList).map(contact => {
+      return {
+        ...contacts[contact],
+        id: contact
+      };
+    });
+   console.log(newContacts);
+   return newContacts ;
+  }
+);
 //
 // export const deleteOneDish = createAsyncThunk<void, string  >(
 //   'dishes/deleteOneDish',
@@ -35,7 +35,7 @@ import axiosApi from '../../axiosAPI.ts';
 
 export const createContact = createAsyncThunk<void,IForm>('contacts/createContact',
   async (form)=>{
-await  axiosApi.post('form.json',{...form});
+await  axiosApi.post('contacts.json',{...form});
 });
 //
 // export const getOneDishById = createAsyncThunk<ApiDish | null, string>('dishes/getOnDishById',
