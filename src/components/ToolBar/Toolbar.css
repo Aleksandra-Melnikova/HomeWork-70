@@ -1,0 +1,13 @@
+.navbar ul .nav-link {
+  color: #ccc;
+}
+
+.navbar ul .nav-link.active {
+  color: white;
+}
+
+/*.button-add{*/
+/*  padding: 10px;*/
+/*  border: 1px solid #ccc;*/
+/*  */
+/*}*/
