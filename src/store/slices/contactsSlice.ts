@@ -1,7 +1,13 @@
-import { IContact } from '../../types';
+import { IContact, IForm } from '../../types';
 
 import { createSlice, PayloadAction, } from '@reduxjs/toolkit';
-import { createContact, deleteOneContact, fetchAllContacts } from '../thunks/contactsThunk.ts';
+import {
+  createContact,
+  deleteOneContact,
+  editContact,
+  fetchAllContacts,
+  getOneContactById
+} from '../thunks/contactsThunk.ts';
 import { RootState } from '../../app/store.ts';
 
 interface ContactState {
@@ -9,29 +15,27 @@ interface ContactState {
   contacts:IContact[];
   isFetchLoading: boolean;
   isDeleteLoading: boolean;
+  oneContact:IForm|null;
+  isFetchOneContactLoading:boolean;
+  isEditLoading: boolean;
 }
 
 const initialState:ContactState   = {
   isAddLoading: false,
   contacts:[],
   isFetchLoading:true,
-  // oneDish:null,
-
-  // isFetchOneDishLoading: false,
+  oneContact:null,
+  isFetchOneContactLoading: false,
   isDeleteLoading: false,
-  // isCreateLoading: false,
-  // isEditLoading: false
+  isEditLoading: false
 };
 export const selectAddLoading = (state: RootState) => state.contacts.isAddLoading;
-//
 export const selectFetchLoading = (state: RootState) => state.contacts.isFetchLoading;
 export const selectContacts = (state: RootState) => state.contacts.contacts;
 export const selectDeleteLoading = (state: RootState) => state.contacts.isDeleteLoading;
-
-// export const selectAddLoading = (state: RootState) => state.contacts;
-// export const selectCreateDishLoading = (state: RootState) => state.dishes.isCreateLoading;
-// export const selectEditDishLoading = (state: RootState) => state.dishes.isEditLoading;
-// export const selectFetchOneDishLoading = (state: RootState) => state.dishes.isFetchOneDishLoading;
+export const selectEditLoading = (state: RootState) => state.contacts.isEditLoading;
+export const selectFetchOneContactLoading = (state: RootState) => state.contacts.isFetchOneContactLoading;
+export const selectContact = (state: RootState) => state.contacts.oneContact;
 
 
 export const contactsSlice = createSlice({
@@ -70,47 +74,31 @@ export const contactsSlice = createSlice({
       })
       .addCase(deleteOneContact.rejected, state => {
         state.isDeleteLoading = false;
+      })
+
+      .addCase(getOneContactById.pending, state => {
+        state.isFetchOneContactLoading = true;
+        state.oneContact = null;
+      })
+      .addCase(getOneContactById.fulfilled, (state,action:PayloadAction<IForm | null>) => {
+        state.isFetchOneContactLoading= false;
+        console.log(action.payload);
+        state.oneContact = action.payload;
+      })
+      .addCase(getOneContactById.rejected, (state) => {
+        state.isFetchOneContactLoading = false;
+      })
+      .addCase(editContact.pending, state => {
+        state.isEditLoading = true;
+
+      })
+      .addCase(editContact.fulfilled, (state) => {
+        state.isEditLoading = false;
+        state.oneContact = null;
+      })
+      .addCase(editContact.rejected, (state) => {
+        state.isEditLoading = false;
       });
-      // .addCase(deleteOneDish.pending, state => {
-      //   state.isDeleteLoading = true;
-      // })
-      // .addCase(deleteOneDish.fulfilled, state => {
-      //   state.isDeleteLoading = false;
-      // })
-      // .addCase(deleteOneDish.rejected, state => {
-      //   state.isDeleteLoading = false;
-      // })
-      // .addCase(createDish.pending, state => {
-      //   state.isCreateLoading = true;
-      // })
-      // .addCase(createDish.fulfilled, state => {
-      //   state.isCreateLoading = false;
-      // })
-      // .addCase(createDish.rejected, state => {
-      //   state.isCreateLoading = false;
-      // })
-      // .addCase(getOneDishById.pending, state => {
-      //   state.isFetchLoading = true;
-      //   state.oneDish = null;
-      // })
-      // .addCase(getOneDishById.fulfilled, (state,action:PayloadAction<ApiDish | null>) => {
-      //   state.isFetchOneDishLoading = false;
-      //   state.oneDish = action.payload;
-      // })
-      // .addCase(getOneDishById.rejected, (state) => {
-      //   state.isFetchOneDishLoading = false;
-      // })
-      // .addCase(editDish.pending, state => {
-      //   state.isFetchOneDishLoading = true;
-      //
-      // })
-      // .addCase(editDish.fulfilled, (state) => {
-      //   state.isEditLoading = false;
-      //   state.oneDish = null;
-      // })
-      // .addCase(editDish.rejected, (state) => {
-      //   state.isEditLoading = false;
-      // });
   }
 });
 

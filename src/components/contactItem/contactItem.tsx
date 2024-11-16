@@ -18,7 +18,7 @@ const ContactItem: React.FC<IContactProps> = ({id, photoUrl,name, phone,email, o
   const isDeleteLoading = useAppSelector(selectDeleteLoading);
   const navigate = useNavigate();
   const deleteContact = async (id:string)=>{
-    await onDelete(id);
+     onDelete(id);
     toast.success(`Contact was deleted successfully.`);
     setShowModal(false);
     navigate(`/`);
@@ -42,7 +42,7 @@ const ContactItem: React.FC<IContactProps> = ({id, photoUrl,name, phone,email, o
         </div>
       </div>
       <div className="modal-footer">
-    <button type={'button'} className="btn btn-success me-3" onClick={() => navigate('/edit')}>Edit</button>
+    <button type={'button'} className="btn btn-success me-3" onClick={() => navigate(`/edit/${id}`)}>Edit</button>
         <ButtonLoading isDisabled={isDeleteLoading} text={'delete'} isLoading={isDeleteLoading} type={'button'} onClick={()=>deleteContact(id)}/>
       </div>
     </Modal>

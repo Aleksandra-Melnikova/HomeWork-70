@@ -37,15 +37,15 @@ export const createContact = createAsyncThunk<void,IForm>('contacts/createContac
   async (form)=>{
 await  axiosApi.post('contacts.json',{...form});
 });
-//
-// export const getOneDishById = createAsyncThunk<ApiDish | null, string>('dishes/getOnDishById',
-//   async (dishId)=>{
-// const response = await  axiosApi<ApiDish | null>(`dishes/${dishId}.json`);
-// return response.data || null;
-//   });
-//  export const editDish = createAsyncThunk<void,{ dishId:string, dish:ApiDish}>(
-//    'dishes/editDish',
-//    async ({dishId,dish}) =>{
-// await axiosApi.put(`dishes/${dishId}.json`,{...dish});
-//    }
-//  );
+
+export const getOneContactById = createAsyncThunk<IForm | null, string>('contacts/getOneContactById',
+  async (contactId)=>{
+const response = await  axiosApi<IContact| null>(`contacts/${contactId}.json`);
+return response.data || null;
+  });
+ export const editContact = createAsyncThunk<void,{  contactId:string, contact:IForm}>(
+   'contacts/ editContact',
+   async ({contactId,contact}) =>{
+await axiosApi.put(`contacts/${contactId}.json`,{...contact});
+   }
+ );

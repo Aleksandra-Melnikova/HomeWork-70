@@ -1,25 +1,69 @@
 
 import ButtonLoading from '../UI/ButtonLoading/ButtonLoading.tsx';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IForm } from '../../types';
-import { useNavigate } from 'react-router-dom';
-import { createContact } from '../../store/thunks/contactsThunk.ts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createContact, editContact } from '../../store/thunks/contactsThunk.ts';
 import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
-import { selectAddLoading } from '../../store/slices/contactsSlice.ts';
+import { selectAddLoading, selectContact } from '../../store/slices/contactsSlice.ts';
 import { toast } from 'react-toastify';
 
+export interface IFormProps {
+  isEdit?: boolean;
+  existingForm?: IForm;
+}
+const initialForm : IForm = {
+  name:'',
+  email:'',
+  phone: '',
+  photoUrl:''
+};
 
-const Form = () => {
-  const initialForm : IForm = {
-    name:'',
-    email:'',
-    phone: '',
-    photoUrl:''
-  };
-  const [form, setForm] = useState<IForm>(initialForm);
+const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm}) => {
+  const {id} = useParams();
+  const [form, setForm] = useState<IForm>(existingForm);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const createAddLoading = useAppSelector(selectAddLoading);
+  const dispatch = useAppDispatch();
+  const contact = useAppSelector(selectContact);
+
+  useEffect(() => {
+    if(id){
+      if(contact)
+        setForm({...contact});
+    }
+    else{
+      setForm({ ...existingForm});
+    }
+  }, [contact, existingForm, id]);
+
+
+  // useEffect(() => {
+  //   if(id){
+  //      dispatch (getOneContactById(id));
+  //   }
+  //
+  // }, [dispatch, id]);
+
+
+//   useEffect(() => {
+//     const getContactToEdit = async () => {
+// if(id){
+//   await dispatch (getOneContactById(id));
+//   if(contact){
+//     setForm({...contact});
+//   }
+//
+// }
+//
+//       else {
+//
+//       }
+// //     };
+//     void getContactToEdit();
+//   }, [contact, dispatch, existingForm, id]);
+
+
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -32,17 +76,40 @@ const Form = () => {
   };
   console.log(form);
 
+  // const onSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (form.name.trim().length === 0 || form.phone.trim().length === 0) {
+  //     alert("Full all fields!");
+  //   } else {
+  //     addNewContact({...form});
+  //
+  //     if (!isEdit) {
+  //       setForm({...existingForm
+  //       });
+  //     }
+  //   }
+  // };
+
   const addNewContacts = async (e: React.FormEvent ,form:IForm) => {
     e.preventDefault();
-    await dispatch(createContact({...form}));
-    navigate('/');
-    toast.success('Contact added successfully.');
+    if(id){
+      await dispatch(editContact({contactId: id, contact: {...form}}));
+      navigate('/');
+      toast.success('Contact was edited successfully.');
+    }
+    else{
+      await dispatch(createContact({...form}));
+      navigate('/');
+      toast.success('Contact added successfully.');
+    }
+
+
   };
 
   return (
     <div className='container'>
-      <form className='mx-auto w-75' onSubmit={(event)=>addNewContacts(event,form)}>
-        <h3 className='my-4'>Add new contact</h3>
+      <form className='mx-auto w-75' onSubmit={(e)=> addNewContacts(e,form)}>
+        <h3 className='my-4'> {isEdit ? 'Edit'  : 'Add new'} dish</h3>
         <div className="d-flex  mb-2">
           <label className='me-4 col-2' htmlFor="name">Name</label>
           <input
@@ -94,17 +161,12 @@ const Form = () => {
           </div>
         </div>
 
-        <div className="d-flex"><ButtonLoading text={'Add'}
+        <div className="d-flex"><ButtonLoading text={'Save'}
           isLoading={createAddLoading }
           isDisabled={createAddLoading }
         />
           <button onClick={()=> navigate('/')} className='btn btn-primary ms-4' type="button">Back to contacts</button></div>
 
-
-        {/*<button type="submit" disabled={isLoading} className="btn btn-primary d-flex align-items-center">*/}
-        {/*  <span className='me-2'>{isEdit ? 'Edit' : 'Add'}</span>*/}
-        {/*  {isLoading?<ButtonSpinner/>:null}*/}
-        {/*</button>*/}
       </form>
     </div>
   );

@@ -1,11 +1,15 @@
 
-import Form from '../../../components/Form/Form.tsx';
+import Form from '../../components/Form/Form.tsx';
+
 
 
 const AddContact = () => {
+
+
+
   return (
     <div>
-     <Form/>
+      <Form />
     </div>
   );
 };
