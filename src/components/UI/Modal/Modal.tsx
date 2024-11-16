@@ -7,7 +7,7 @@ interface Props extends React.PropsWithChildren{
   defaultModalBtn?: boolean;
 }
 
-const Modal: React.FC<Props> = ({show, title = 'Modal title', children, closeModal, defaultModalBtn}) => {
+const Modal: React.FC<Props> = ({show, title = 'Modal title', children, closeModal,}) => {
 
   return (
     <>
@@ -17,13 +17,12 @@ const Modal: React.FC<Props> = ({show, title = 'Modal title', children, closeMod
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5">{title}</h1>
+                  <button onClick={closeModal} className="btn btn-close" type="button"></button>
             </div>
             <div className="p-2">
               {children}
             </div>
-            <div className="modal-footer">
-              {defaultModalBtn ? <button onClick={closeModal} className="btn btn-primary" type="button">Close</button> : null}
-            </div>
+
           </div>
         </div>
       </div>

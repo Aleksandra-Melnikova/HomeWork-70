@@ -24,14 +24,14 @@ export const fetchAllContacts = createAsyncThunk<IContact[], void>(
    return newContacts ;
   }
 );
-//
-// export const deleteOneDish = createAsyncThunk<void, string  >(
-//   'dishes/deleteOneDish',
-//   async (dishId:string)=>{
-//       await axiosApi.delete(`dishes/${dishId}.json`);
-//     }
-//
-// );
+
+export const deleteOneContact = createAsyncThunk<void, string  >(
+  'contacts/deleteOneContact',
+  async (contactId:string)=>{
+      await axiosApi.delete(`contacts/${contactId}.json`);
+    }
+
+);
 
 export const createContact = createAsyncThunk<void,IForm>('contacts/createContact',
   async (form)=>{

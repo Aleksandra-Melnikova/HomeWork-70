@@ -1,23 +1,24 @@
 import { IContact } from '../../types';
 
 import { createSlice, PayloadAction, } from '@reduxjs/toolkit';
-import { createContact, fetchAllContacts } from '../thunks/contactsThunk.ts';
+import { createContact, deleteOneContact, fetchAllContacts } from '../thunks/contactsThunk.ts';
 import { RootState } from '../../app/store.ts';
 
 interface ContactState {
   isAddLoading: boolean;
   contacts:IContact[];
   isFetchLoading: boolean;
+  isDeleteLoading: boolean;
 }
 
 const initialState:ContactState   = {
   isAddLoading: false,
   contacts:[],
-  isFetchLoading:true
+  isFetchLoading:true,
   // oneDish:null,
 
   // isFetchOneDishLoading: false,
-  // isDeleteLoading: false,
+  isDeleteLoading: false,
   // isCreateLoading: false,
   // isEditLoading: false
 };
@@ -25,6 +26,8 @@ export const selectAddLoading = (state: RootState) => state.contacts.isAddLoadin
 //
 export const selectFetchLoading = (state: RootState) => state.contacts.isFetchLoading;
 export const selectContacts = (state: RootState) => state.contacts.contacts;
+export const selectDeleteLoading = (state: RootState) => state.contacts.isDeleteLoading;
+
 // export const selectAddLoading = (state: RootState) => state.contacts;
 // export const selectCreateDishLoading = (state: RootState) => state.dishes.isCreateLoading;
 // export const selectEditDishLoading = (state: RootState) => state.dishes.isEditLoading;
@@ -58,7 +61,16 @@ export const contactsSlice = createSlice({
         })
         .addCase(fetchAllContacts.rejected, state => {
           state.isFetchLoading = false;
-        });
+        })
+      .addCase(deleteOneContact.pending, state => {
+        state.isDeleteLoading = true;
+      })
+      .addCase(deleteOneContact.fulfilled, state => {
+        state.isDeleteLoading = false;
+      })
+      .addCase(deleteOneContact.rejected, state => {
+        state.isDeleteLoading = false;
+      });
       // .addCase(deleteOneDish.pending, state => {
       //   state.isDeleteLoading = true;
       // })
