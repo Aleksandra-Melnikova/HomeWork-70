@@ -9,9 +9,9 @@ export interface IContact {
   phone: string;
   email: string;
   photoUrl: string;
-  id:string;
+  id: string;
 }
 
 export interface IContactsList {
-  [id: string]:IForm
+  [id: string]: IForm;
 }
