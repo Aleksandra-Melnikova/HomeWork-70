@@ -38,32 +38,6 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
   }, [contact, existingForm, id]);
 
 
-  // useEffect(() => {
-  //   if(id){
-  //      dispatch (getOneContactById(id));
-  //   }
-  //
-  // }, [dispatch, id]);
-
-
-//   useEffect(() => {
-//     const getContactToEdit = async () => {
-// if(id){
-//   await dispatch (getOneContactById(id));
-//   if(contact){
-//     setForm({...contact});
-//   }
-//
-// }
-//
-//       else {
-//
-//       }
-// //     };
-//     void getContactToEdit();
-//   }, [contact, dispatch, existingForm, id]);
-
-
   const changeForm = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -74,21 +48,6 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
       };
     });
   };
-  console.log(form);
-
-  // const onSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (form.name.trim().length === 0 || form.phone.trim().length === 0) {
-  //     alert("Full all fields!");
-  //   } else {
-  //     addNewContact({...form});
-  //
-  //     if (!isEdit) {
-  //       setForm({...existingForm
-  //       });
-  //     }
-  //   }
-  // };
 
   const addNewContacts = async (e: React.FormEvent ,form:IForm) => {
     e.preventDefault();
@@ -98,11 +57,16 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
       toast.success('Contact was edited successfully.');
     }
     else{
-      await dispatch(createContact({...form}));
-      navigate('/');
-      toast.success('Contact added successfully.');
-    }
 
+    if(form.name.trim().length > 0 && form.phone.trim().length > 0){
+        await dispatch(createContact({...form}));
+        navigate('/');
+        toast.success('Contact added successfully.');}
+      else{
+        toast.warning('Fill in the name and phone number field.');
+      }
+
+    }
 
   };
 
@@ -113,6 +77,7 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
         <div className="d-flex  mb-2">
           <label className='me-4 col-2' htmlFor="name">Name</label>
           <input
+            required
             type="text"
             onChange={changeForm}
             value={form.name}
@@ -125,6 +90,7 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
         <div className="d-flex mb-2">
           <label className='me-4 col-2' htmlFor="phone">Phone</label>
           <input
+            required
             type='text'
             value={form.phone}
             id="phone"
@@ -157,7 +123,7 @@ const Form:React.FC<IFormProps> = ({isEdit = false, existingForm = initialForm})
           />
         </div>
         <div className='d-flex align-items-start mt-4 mb-4'><span className='d-block me-4 col-2'>Photo preview</span>
-          <div className=" photo border border-1 border-bg-light rounded-2">{form.photoUrl?<><img className={'w-100 h-auto'} src={form.photoUrl} alt={''}/></>:null}
+          <div className=" photo border border-1 border-bg-light rounded-2 d-flex p-3">{form.photoUrl?<><img className={'w-100 h-auto align-items-center'} src={form.photoUrl} alt={''}/></>:null}
           </div>
         </div>
 

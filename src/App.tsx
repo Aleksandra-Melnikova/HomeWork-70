@@ -7,17 +7,19 @@ import AddContact from './containers/AddContact/AddContact.tsx';
 import EditContact from './containers/EditContact/EditContact.tsx';
 
 
-const App = () => (
+const App = () =>{
+  return (
     <>
-<Layout>
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/add" element={<AddContact />} />
-    <Route path={`/edit/:id`} element={<EditContact/>}/>
-    <Route path="*" element={<h1>Not found</h1>} />
-  </Routes>
-</Layout>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/add" element={<AddContact />} />
+          <Route path={`/edit/:id`} element={<EditContact/>}/>
+          <Route path="*" element={<h1>Not found</h1>} />
+        </Routes>
+      </Layout>
     </>
-);
+  );
+} ;
 
 export default App;

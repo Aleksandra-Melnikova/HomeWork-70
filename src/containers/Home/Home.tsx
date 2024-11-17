@@ -24,7 +24,7 @@ const Home = () => {
   };
   return (
 
-    <>{contacts.length > 0 ? (<>{isFetchLoading?<Spinner/>:<> {contacts.map(contact => (
+    <>{contacts.length > 0 || isFetchLoading? (<>{isFetchLoading?<Spinner/>:<> {contacts.map(contact => (
       <ContactItem key={contact.id} id={contact.id} name={contact.name} photoUrl={contact.photoUrl} email={contact.email} phone={contact.phone} onDelete={()=>deleteContact(contact.id)}  />
     ))}</>}
     </>) : (<p className='d-block text-center mt-5'>

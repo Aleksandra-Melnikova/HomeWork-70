@@ -7,21 +7,17 @@ export const fetchAllContacts = createAsyncThunk<IContact[], void>(
   async () => {
     const response: {data: IContactsList | null} = await axiosApi('contacts.json');
     const contactsList = response.data;
-
     if (contactsList === null) {
       return [];
     }
-
     const contacts: IContactsList = contactsList;
 
-   const newContacts = Object.keys(contactsList).map(contact => {
-      return {
-        ...contacts[contact],
-        id: contact
-      };
-    });
-   console.log(newContacts);
-   return newContacts ;
+   return Object.keys(contactsList).map(contact => {
+     return {
+       ...contacts[contact],
+       id: contact
+     };
+   }) ;
   }
 );
 

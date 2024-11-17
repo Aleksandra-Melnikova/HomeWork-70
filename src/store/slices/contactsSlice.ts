@@ -55,7 +55,6 @@ export const contactsSlice = createSlice({
       .addCase(createContact.rejected, state => {
         state.isAddLoading = false;
       })
-
     .addCase(fetchAllContacts.pending, state => {
         state.isFetchLoading = true;
       })
@@ -75,14 +74,12 @@ export const contactsSlice = createSlice({
       .addCase(deleteOneContact.rejected, state => {
         state.isDeleteLoading = false;
       })
-
       .addCase(getOneContactById.pending, state => {
         state.isFetchOneContactLoading = true;
         state.oneContact = null;
       })
       .addCase(getOneContactById.fulfilled, (state,action:PayloadAction<IForm | null>) => {
         state.isFetchOneContactLoading= false;
-        console.log(action.payload);
         state.oneContact = action.payload;
       })
       .addCase(getOneContactById.rejected, (state) => {
